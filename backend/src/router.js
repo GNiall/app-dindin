@@ -3,19 +3,19 @@ const {
   cadastrarUsuario,
   realizarLogin,
   alterarCadastro,
-  listarUsuarios,
+  listarUsuario,
 } = require("./controllers/usuarios.controller");
 const validarToken = require("./middlewares/validarToken");
 const router = express();
 
 
-router.post("/usuarios", cadastrarUsuario);
+router.post("/usuario", cadastrarUsuario);
 router.post("/login", realizarLogin);
 
 router.use(validarToken)
 
-router.get("/usuarios",listarUsuarios);
+router.get("/usuario",listarUsuario);
 
-router.put("/usuarios/:id/editar",alterarCadastro);
+router.put("/usuario/:id/editar",alterarCadastro);
 
 module.exports = router;

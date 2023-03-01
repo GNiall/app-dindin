@@ -1,0 +1,120 @@
+.container-signin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1440px;
+  height: 100vh;
+  background-image: url(../../assets/background\ 1.png);
+}
+
+.container-signin form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px 32px 0px 32px;
+  width: 513px;
+  height: 535px;
+  left: 805px;
+  top: 194px;
+
+  background: #ffffff;
+}
+.container-signin label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 32px;
+  width: 513px;
+  min-height: 100px;
+}
+.container-signin input {
+  width: 449px;
+  height: 63px;
+  left: 837px;
+  top: 368px;
+  margin-top: 10px;
+  padding:20px;
+  background: #ffffff;
+  border: 1px solid #555555;
+  border-radius: 5px;
+}
+
+.container-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  width: 700px;
+  height: 535px;
+}
+.container-texto h1 {
+  width: 614px;
+  height: 124px;
+  left: 100px;
+  top: 327px;
+
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 52px;
+  line-height: 62px;
+
+  color: #ffffff;
+}
+.container-texto span {
+  width: 600px;
+  height: 99px;
+  left: 105px;
+  top: 484px;
+
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 33px;
+  display: flex;
+  align-items: center;
+
+  color: #ffffff;
+}
+strong {
+  font-family: "Rubik";
+  font-style: "bold";
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 33px;
+
+  color: #7978d9;
+}
+h1 b {
+  color: #7978d9;
+}
+
+.conatiner-signin button , .conatiner-signup button , .container-texto button{
+  width: 284px;
+  height: 52px;
+  background: #7978d9;
+  border-radius: 5px;
+  color: white;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 17px;
+
+  text-align: center;
+
+  color: #ffffff;
+}
+.container-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 449px;
+  height: 30px;
+}
+
+.alert-signin{
+  color: crimson;
+}

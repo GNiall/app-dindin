@@ -1,0 +1,43 @@
+table {
+  display: flex;
+  flex-direction: column;
+  width: 964px;
+  height: 327px;
+  gap: 52px 0;
+}
+tbody tr {
+  display: flex;
+  align-items: center;
+  width: 964px;
+  height: 69px;
+  border-bottom: 1px solid #e0e0e0;
+  justify-content: space-around;
+}
+th {
+  width: 227px;
+  height: 20px;
+}
+thead {
+  width: 964px;
+  height: 58px;
+
+  background: #fafafa;
+  box-shadow: 0px 2px 11px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+thead {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  width: 964px;
+}
+tbody {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-around;
+  align-items: center;
+
+  width: 964px;
+}

@@ -1,0 +1,46 @@
+header {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 43px 100px;
+  width: 1440px;
+  height: 224px;
+
+  background: linear-gradient(90.23deg, #05ede3 0.02%, #645ffb 99.63%);
+}
+
+header .logo {
+  width: 169px;
+  height: 45px;
+}
+.span-container-logo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   width: 45px;
+  height: 45px;
+  border: 3px solid white;
+  border-radius: 50%;
+
+
+}
+.profile {
+  width: 29px;
+  height: 31px;
+}
+section .exit {
+  width: 22px;
+  height: 27px;
+}
+
+header section {
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+}
+header h1 {
+  color: white;
+}

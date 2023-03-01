@@ -26,7 +26,7 @@ async function cadastrarUsuario(req, res) {
     ) values ($1,$2,$3) returning *`,
       params
     );
-    console.log;
+
     return res.json({
       usuario: {
         id: insertUser.rows[0].id,
@@ -97,14 +97,20 @@ async function alterarCadastro(req, res) {
   res.json(update.rows);
 }
 
-async function listarUsuarios(req, res) {
-  const usuarios = await pool.query(`select * from usuarios;`);
+async function listarUsuario(req, res) {
+  const {id}= req.usuario
+  try{const usuario = await pool.query(`select * from usuarios where id=$1;`, [
+   id
+  ]);
 
-  return res.json(usuarios.rows);
+  return res.json(usuario.rows[0]);}
+  catch(error){
+    console.log("error.message")
+  }
 }
 module.exports = {
   cadastrarUsuario,
   realizarLogin,
-  listarUsuarios,
+  listarUsuario,
   alterarCadastro,
 };

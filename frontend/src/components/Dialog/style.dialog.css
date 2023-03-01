@@ -1,0 +1,35 @@
+dialog {
+  width: 1440px;
+  min-height: 1024px;
+  border-radius: 8px;
+  background-color: #0000005f;
+  padding: 89px 0 69px 415px;
+}
+
+.container-dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid red;
+  width: 611px;
+  height: 879px;
+
+  position: relative;
+
+  background: #ffffff;
+  overflow: none;
+}
+
+.img-close {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  top: 67px;
+  right: 64px;
+}
+
+
+form,label {
+  display: flex;
+  flex-direction: column;
+}
