@@ -1,5 +1,5 @@
 dialog {
-  width: 1440px;
+  min-width: 1440px;
   min-height: 1024px;
   border-radius: 8px;
   background-color: #0000005f;
@@ -10,14 +10,26 @@ dialog {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 2px solid red;
   width: 611px;
-  height: 879px;
-
-  position: relative;
-
+  height: 799px;
+  padding: 61px 0 64px 0;
+  gap: 50px;
+  position: fixed;
+  top: 79px;
   background: #ffffff;
   overflow: none;
+}
+.container-dialog input,
+select {
+  width: 485px;
+  height: 63px;
+
+  background: #ffffff;
+  border: 1px solid #555555;
+  border-radius: 5px;
+}
+.container-dialog h1 {
+  color: black;
 }
 
 .img-close {
@@ -28,8 +40,44 @@ dialog {
   right: 64px;
 }
 
-
-form,label {
+form,
+label {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+label {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+
+  color: #484848;
+}
+.btn-saida:focus {
+  background: #ff576b;
+}
+.btn-entrada:focus {
+  background: #3a9ff1;
+}
+.btn-entrada,
+.btn-saida {
+  width: 245px;
+  height: 60px;
+  border: none;
+  background: #b9b9b9;
+  border-radius: 10px;
+  color: white;
+}
+
+.btn-confirmar {
+  width: 236px;
+  height: 46px;
+  position: absolute;
+  left: 180px;
+  top: 720px;
+  background: #7978d9;
+  border-radius: 5px;
+  color: white;
 }

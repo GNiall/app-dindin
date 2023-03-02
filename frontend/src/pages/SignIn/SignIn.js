@@ -1,13 +1,21 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/Logo.png";
 import instanceAxios from "../../service/index";
-
-function SignIn({ state, setState }) {
+import "./styles.signin.css";
+function SignIn() {
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    showPassword: false,
+    mensagem:""
+  });
   const { email, senha, showPassword, mensagem } = state;
-
   const navigate = useNavigate();
 
   return (
     <div className="container-signin">
+      <img className="logo" src={logo} alt="logo" />
       <div className="container-texto">
         <h1>
           Controle suas <b>finanças</b>,<br />
@@ -18,7 +26,7 @@ function SignIn({ state, setState }) {
           <br /> com o DINDIN, você tem tudo num único lugar
           <br /> e em um clique de distância.
         </span>
-        <button onClick={() => navigate("/signup")}>Cadastre-se</button>
+        <button onClick={() => navigate("/sign-up")}>Cadastre-se</button>
       </div>
 
       <div className="container-form-signin">
@@ -35,11 +43,12 @@ function SignIn({ state, setState }) {
                 senha: senha,
               });
               localStorage.setItem("token", data.token);
+              localStorage.setItem("nome", data.usuarioLogado.nome);
+              localStorage.setItem("id", data.usuarioLogado.id);
               setState({
                 ...state,
                 email: "",
                 senha: "",
-                token: data.token,
               });
 
               navigate("/main");

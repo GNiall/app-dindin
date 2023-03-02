@@ -1,11 +1,16 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import close from "../../assets/close.png";
 import "./style.dialog.css";
-export default function DialogEditar({ state, setState }) {
+
+
+
+export default function DialogEditar() {
   const ref = useRef("");
+const [state, setState] = useState({});
+
 
   return (
-    <dialog ref={ref}>
+    <dialog className="dialog-editar" ref={ref}>
       <div className="container-dialog">
         <img
           className="img-close"
@@ -16,17 +21,25 @@ export default function DialogEditar({ state, setState }) {
           alt="close"
         />
 
-        <h1>Adicionar Registro </h1>
+        <h1>Editar Registro </h1>
         <span className="container-btn-registros">
-          <button>Entrada</button>
-          <button>Saida</button>
+          <button type="checkbox" className="btn-entrada">
+            Entrada
+          </button>
+          <button type="checkbox" className="btn-saida">
+            Saida
+          </button>
         </span>
-        <form>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+          }}
+        >
           <label>
             valor
             <input
               name="valor"
-              type="number"
+              type="text"
               value={state.valor}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
@@ -36,7 +49,7 @@ export default function DialogEditar({ state, setState }) {
           <label>
             categoria
             <select>
-              <option value="empty">Selecione uma categoria</option>
+              <option value="empty"></option>
               {state.categorias ? (
                 state.categorias.map((categoria) => {
                   return (
@@ -54,8 +67,8 @@ export default function DialogEditar({ state, setState }) {
             data
             <input
               name="data"
-              type="date"
-              value={state.data}
+              type="text"
+              value={state.data && ""}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
@@ -64,15 +77,15 @@ export default function DialogEditar({ state, setState }) {
           <label>
             descrição
             <input
-              name="descrição"
+              name="descricao"
               type="text"
-              value={state.descrição}
+              value={state.descricao && ""}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
             />
           </label>
-          <button>Confirmar</button>
+          <button className="btn-confirmar">Confirmar</button>
         </form>
       </div>
     </dialog>

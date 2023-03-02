@@ -3,21 +3,34 @@ import profile from "../../assets/profile.png";
 import exit from "../../assets/exit.png";
 
 import "./style.header.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
     <header>
-      <img className="logo" src={logo} alt="logo" />
+      <img className="logo-header" src={logo} alt="logo" />
       <section>
         <span className="span-container-logo">
-          <img className="profile" src={profile} alt="" />
+          <img
+            className="profile"
+           onClick={()=>{
+            const dialog = document.querySelector(".dialog-usuario")
+            dialog.showModal()
+           }}
+            src={profile}
+            alt=""
+          />
         </span>
-        <h1>Marcus</h1>
+        <h1>{localStorage.getItem("nome")}</h1>
         <img
           className="exit"
           src={exit}
           alt="exit"
-          onClick={() => console.log("quero sair")}
+          onClick={() => {
+            localStorage.clear();
+            navigate("/sign-in");
+          }}
         />
       </section>
     </header>

@@ -36,10 +36,10 @@
 .container-resumo {
   display: flex;
   flex-direction: column;
-  gap:23px;
-  padding:26px 0 32px 23px;
+  gap: 23px;
+  padding: 26px 0 32px 23px;
   width: 236px;
-  height: 196px;
+  height: 206px;
   background: #fafafa;
   box-shadow: 0px 2px 11px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -75,7 +75,6 @@
   font-weight: 700;
   font-size: 14px;
   line-height: 17px;
- 
 
   color: #ffffff;
 }
@@ -93,11 +92,15 @@
 }
 
 .span-entrada b {
-  color: blue;
+  color: #645ffb;
 }
 .span-saida b {
-  color: crimson;
+  color: #fa8c10;
 }
 .span-total {
   border-top: 2px solid rgba(0, 0, 0, 0.531);
+  padding-top: 10px;
+}
+.span-total b {
+  color: #3a9ff1;
 }

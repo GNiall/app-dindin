@@ -1,7 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import instanceAxios from "../../service";
+import "./styles.signup.css";
+import logo from "../../assets/Logo.png";
+import { useState } from "react";
 
-function SignUp({ state, setState }) {
+function SignUp() {
+  const [state, setState] = useState({
+    nome: "",
+    email: "",
+    senha: "",
+    confirmacaoSenha: "",
+    showPassword: false,
+  });
   const navigate = useNavigate();
 
   const { nome, email, senha, confirmacaoSenha, showPassword, mensagem } =
@@ -9,6 +19,7 @@ function SignUp({ state, setState }) {
 
   return (
     <div className="container-signup">
+      <img className="logo" src={logo} alt="logo" />
       <form
         className="form-signup"
         onSubmit={async (event) => {
@@ -21,9 +32,9 @@ function SignUp({ state, setState }) {
           ) {
             setState({ ...state, mensagem: "Preencha todos os campos!" });
           } else if (senha !== confirmacaoSenha) {
-            setState({ ...state, mensagem: "Senha invalida" });
+            setState({ ...state, mensagem: "Senha não conferem" });
           }
-          const { data } = await instanceAxios.post("/usuarios", {
+          const { data } = await instanceAxios.post("/usuario", {
             nome: nome,
             email: email,
             senha: senha,
@@ -37,7 +48,7 @@ function SignUp({ state, setState }) {
             mensagem: "",
           });
 
-          if (data) setTimeout(navigate("/signin"), 5000);
+          if (data) navigate("/sign-in");
         }}
       >
         <h1>Cadastro</h1>
@@ -115,7 +126,7 @@ function SignUp({ state, setState }) {
 
       <h2 className="tem-cadastro">
         Já tem cadastro?
-        <Link to={"/signin"}>Clique aqui</Link>
+        <Link to={"/sign-in"}>Clique aqui</Link>
       </h2>
     </div>
   );

@@ -10,30 +10,29 @@ async function cadastrarUsuario(req, res) {
     return res
       .status(400)
       .json({ mensagem: "Todos os campos devem ser preenchidos!" });
-  if (!email.includes("@"))
+
+  if ([!email].includes("@"))
     return res
       .status(400)
       .json({ mensagem: "Informe um email no formato valido" });
+
   try {
     const senhaCryptografada = await bcrypt.hash(senha, 10);
     const params = [nome, email, senhaCryptografada];
 
     const insertUser = await pool.query(
       `INSERT INTO  usuarios (
-    nome,
-    email,
-    senha
-    ) values ($1,$2,$3) returning *`,
+      nome,
+      email,
+      senha
+      ) VALUES ($1, $2, $3) RETURNING *`,
       params
     );
 
     return res.json({
-      usuario: {
-        id: insertUser.rows[0].id,
-        nome: insertUser.rows[0].nome,
-        email: insertUser.rows[0].email,
-      },
-      token: insertUser.rows[0].senha,
+      id: insertUser.rows[0].id,
+      nome: insertUser.rows[0].nome,
+      email: insertUser.rows[0].email,
     });
   } catch (error) {
     if (
@@ -86,31 +85,20 @@ async function realizarLogin(req, res) {
 
 async function alterarCadastro(req, res) {
   const { id } = req.params;
-  const { nome, email, endereco, senha } = req.body;
+  const { nome, email, senha } = req.body;
+
   const senhaCryptografada = await bcrypt.hash(senha, 10);
-  const params = [nome, email, endereco, senhaCryptografada, id];
-  const update = await pool.query(
-    `UPDATE usuarios SET nome = $1 ,email = $2 ,endereco = $3, senha = $4 WHERE id = $5 RETURNING *;`,
+  const params = [nome, email, senhaCryptografada, id];
+  await pool.query(
+    `UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4;`,
     params
   );
 
-  res.json(update.rows);
+  res.status(200).json();
 }
 
-async function listarUsuario(req, res) {
-  const {id}= req.usuario
-  try{const usuario = await pool.query(`select * from usuarios where id=$1;`, [
-   id
-  ]);
-
-  return res.json(usuario.rows[0]);}
-  catch(error){
-    console.log("error.message")
-  }
-}
 module.exports = {
   cadastrarUsuario,
   realizarLogin,
-  listarUsuario,
   alterarCadastro,
 };
