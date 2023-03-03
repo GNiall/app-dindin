@@ -21,6 +21,8 @@ dialog {
 }
 .container-dialog input,
 select {
+all:unset;
+
   width: 485px;
   height: 63px;
 
@@ -55,12 +57,7 @@ label {
 
   color: #484848;
 }
-.btn-saida:focus {
-  background: #ff576b;
-}
-.btn-entrada:focus {
-  background: #3a9ff1;
-}
+
 .btn-entrada,
 .btn-saida {
   width: 245px;

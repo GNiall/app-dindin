@@ -53,10 +53,16 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  width: 236px;
-  height: 258px;
+  width: 245px;
+  height: 265px;
   left: 1104px;
   top: 279px;
+  border:2px solid red
+
+}
+.container-group-resumo{
+
+  background-color: #ffffff00;
 }
 .section-container-resumo button {
   width: 236px;
@@ -104,3 +110,5 @@
 .span-total b {
   color: #3a9ff1;
 }
+
+

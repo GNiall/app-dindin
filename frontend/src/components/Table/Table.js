@@ -1,37 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import setaCima from "../../assets/setaCima.png";
 import setaBaixo from "../../assets/setaBaixo.png";
 import lapisImagem from "../../assets/lapisImagem.png";
 import lixeiraImagem from "../../assets/lixeiraImagem.png";
 import "./style.table.css";
 import Deletar from "../Dialog/DialogDeletar";
+import { loadTransactions } from "../../functions/requisicoes";
 
 export default function Table() {
   const [state, setState] = useState({
     imagem: setaCima,
-    transacoes: [
-      {
-        id: 1,
-        tipo: "entrada",
-        descricao: "venda de peças",
-        valor: "2000",
-        data: "01032022",
-        categoria_id: 15,
-        usuario_id: 2,
-      },
-      {
-        id: 2,
-        tipo: "entrada",
-        descricao: "venda de peças",
-        valor: "2000",
-        data: "01032022",
-        categoria_id: 15,
-        usuario_id: 2,
-      },
-    ],
+    transacoes: [],
   });
   const { imagem, transacoes } = state;
-
+useEffect(()=>{
+loadTransactions(state,setState)
+},[])
   return (
     <>
       <Deletar />
@@ -74,7 +58,7 @@ export default function Table() {
                 <th>{transacao.data}</th>
                 <th>Terça</th>
 
-                <th>marcus vinicius</th>
+                <th>{transacao.descricao}</th>
                 <th>{transacao.categoria_id}</th>
                 <th>{transacao.valor}</th>
                 <th>

@@ -2,27 +2,19 @@ import Table from "../Table/Table";
 import icone from "../../assets/icons8-filtro-48 1.png";
 import "./style.css";
 import plus from "../../assets/plus.png";
-// import instanceAxios from "../../service";
-import { useState } from "react";
-// async function loadCategories(state, setState) {
-//   try {
-//     const { data } = await instanceAxios.get("/categoria", {
-//       headers: {
-//         Authorization: `Bearer ${localStorage.getItem("token")}`,
-//       },
-//     });
+import { useEffect, useState } from "react";
+import { loadCategories } from "../../functions/requisicoes";
 
-//     return data.sort((a, b) => a - b);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 export default function Filtrar() {
   const [state, setState] = useState({
     filtrar: false,
-    categorias: []
+    categorias: [],
   });
   const { categorias } = state;
+
+  useEffect(() => {
+    loadCategories(state, setState);
+  }, []);
   return (
     <>
       <span
@@ -54,20 +46,20 @@ export default function Filtrar() {
                       className="input-checkbox"
                       type={"checkbox"}
                       onClick={(event) => {
-                        if (event.target.checked){
+                        if (event.target.checked) {
                           setState({
                             ...state,
                             [event.target.name]: "selecionado",
-                           
-                          })
-                           console.log(event.target.name+" selecionado");}else{
-                            setState({
-                              ...state,
-                              [event.target.name]: "",
-                            });
-                             console.log(event.target.name+" Não selecionado");
-                          }
-                        setState({...state})
+                          });
+                          console.log(event.target.name + " selecionado");
+                        } else {
+                          setState({
+                            ...state,
+                            [event.target.name]: "",
+                          });
+                          console.log(event.target.name + " Não selecionado");
+                        }
+                        setState({ ...state });
                       }}
                     />
                     {categoria.descricao}
