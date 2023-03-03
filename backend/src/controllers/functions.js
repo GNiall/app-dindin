@@ -25,8 +25,13 @@ async function listarCategorias(req, res) {
 }
 
 async function listarTransacoes(req, res) {
+  const { id } = req.usuario;
+
   try {
-    const { rows } = await pool.query(`SELECT * FROM transacoes;`);
+    const { rows } = await pool.query(
+      `SELECT * FROM transacoes WHERE usuario_id = $1;`,
+      [id]
+    );
 
     const insertData = rows.map((data) => {
       return {

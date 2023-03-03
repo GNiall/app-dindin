@@ -12,10 +12,13 @@ export default function Table() {
     imagem: setaCima,
     transacoes: [],
   });
+
   const { imagem, transacoes } = state;
-useEffect(()=>{
-loadTransactions(state,setState)
-},[])
+
+  useEffect(() => {
+    loadTransactions(state, setState);
+  }, []);
+
   return (
     <>
       <Deletar />
@@ -38,7 +41,11 @@ loadTransactions(state,setState)
               >
                 Data
                 <img
-                  style={{ width: "6px", height: "6px" }}
+                  style={{
+                    width: "6px",
+                    height: "6px",
+                    marginLeft: "5px",
+                  }}
                   src={imagem}
                   alt=""
                 />
@@ -46,8 +53,8 @@ loadTransactions(state,setState)
             </th>
             <th>Dia da Semana</th>
             <th>Descrição</th>
-            <th>categoria</th>
-            <th>valor</th>
+            <th>Categoria</th>
+            <th>Valor</th>
             <th></th>
           </tr>
         </thead>

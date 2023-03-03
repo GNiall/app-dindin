@@ -2,12 +2,9 @@ import { useRef, useState } from "react";
 import close from "../../assets/close.png";
 import "./style.dialog.css";
 
-
-
 export default function DialogEditar() {
   const ref = useRef("");
-const [state, setState] = useState({});
-
+  const [state, setState] = useState({});
 
   return (
     <dialog className="dialog-editar" ref={ref}>
@@ -30,13 +27,14 @@ const [state, setState] = useState({});
             Saida
           </button>
         </span>
+
         <form
           onSubmit={(event) => {
             event.preventDefault();
           }}
         >
           <label>
-            valor
+            Valor
             <input
               name="valor"
               type="text"
@@ -46,8 +44,9 @@ const [state, setState] = useState({});
               }
             />
           </label>
+
           <label>
-            categoria
+            Categoria
             <select>
               <option value="empty"></option>
               {state.categorias ? (
@@ -64,7 +63,7 @@ const [state, setState] = useState({});
             </select>
           </label>
           <label>
-            data
+            Data
             <input
               name="data"
               type="text"
@@ -74,8 +73,9 @@ const [state, setState] = useState({});
               }
             />
           </label>
+
           <label>
-            descrição
+            Descrição
             <input
               name="descricao"
               type="text"

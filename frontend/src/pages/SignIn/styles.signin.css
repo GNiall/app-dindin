@@ -7,7 +7,6 @@
   background-image: url(../../assets/background\ 1.png);
 }
 
-
 .container-signin form {
   display: flex;
   flex-direction: column;
@@ -35,7 +34,7 @@
   left: 837px;
   top: 368px;
   margin-top: 10px;
-  padding:20px;
+  padding: 20px;
   background: #ffffff;
   border: 1px solid #555555;
   border-radius: 5px;
@@ -79,6 +78,7 @@
 
   color: #ffffff;
 }
+
 strong {
   font-family: "Rubik";
   font-style: "bold";
@@ -88,14 +88,19 @@ strong {
 
   color: #7978d9;
 }
+
 h1 b {
   color: #7978d9;
 }
 
-.conatiner-signin button , .conatiner-signup button , .container-texto button{
+.container-signin button,
+.container-signup button,
+.container-texto button {
   width: 284px;
   height: 52px;
-  background: #7978d9;
+  margin-top: 20px;
+  background-color: #7978d9;
+  border: none;
   border-radius: 5px;
   color: white;
   font-family: "Rubik";
@@ -107,15 +112,27 @@ h1 b {
   text-align: center;
 
   color: #ffffff;
+
+  cursor: pointer;
 }
+
+.container-signin button {
+  width: 100%;
+}
+
+.container-texto button {
+  width: 284px;
+}
+
 .container-checkbox {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 449px;
   height: 30px;
+  font-family: "Lato";
 }
 
-.alert-signin{
+.alert-signin {
   color: crimson;
 }

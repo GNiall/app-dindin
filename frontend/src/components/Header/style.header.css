@@ -13,6 +13,7 @@ header {
   width: 169px;
   height: 45px;
 }
+
 .span-container-logo {
   display: flex;
   justify-content: center;
@@ -22,13 +23,21 @@ header {
   border: 3px solid white;
   border-radius: 50%;
 }
+
 .profile {
+  position: relative;
   width: 29px;
   height: 31px;
+  right: 5px;
+
+  cursor: pointer;
 }
+
 section .exit {
   width: 22px;
   height: 27px;
+
+  cursor: pointer;
 }
 
 header section {
@@ -39,6 +48,7 @@ header section {
 
   gap: 12px;
 }
+
 header h1 {
   color: white;
 }

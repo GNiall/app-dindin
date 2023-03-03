@@ -24,6 +24,7 @@ function SignUp() {
         className="form-signup"
         onSubmit={async (event) => {
           event.preventDefault();
+
           if (
             nome === "" ||
             email === "" ||
@@ -34,11 +35,13 @@ function SignUp() {
           } else if (senha !== confirmacaoSenha) {
             setState({ ...state, mensagem: "Senha não conferem" });
           }
+
           const { data } = await instanceAxios.post("/usuario", {
             nome: nome,
             email: email,
             senha: senha,
           });
+
           setState({
             ...state,
             nome: "",
@@ -51,7 +54,7 @@ function SignUp() {
           if (data) navigate("/sign-in");
         }}
       >
-        <h1>Cadastro</h1>
+        <h1>Cadastre-se</h1>
 
         <label>
           <p>Nome</p>
@@ -65,6 +68,7 @@ function SignUp() {
             }
           />
         </label>
+
         <label>
           <p> E-mail</p>
           <input
@@ -77,6 +81,7 @@ function SignUp() {
             }
           />
         </label>
+
         <label>
           <p>Senha</p>
           <input
@@ -89,6 +94,7 @@ function SignUp() {
             }
           />
         </label>
+
         <label>
           <p> Confirmar senha</p>
           <input
@@ -126,7 +132,7 @@ function SignUp() {
 
       <h2 className="tem-cadastro">
         Já tem cadastro?
-        <Link to={"/sign-in"}>Clique aqui</Link>
+        <Link to={"/sign-in"}>Clique aqui!</Link>
       </h2>
     </div>
   );

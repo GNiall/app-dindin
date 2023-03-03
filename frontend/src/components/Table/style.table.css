@@ -1,3 +1,7 @@
+* {
+  font-family: "Lato";
+}
+
 table {
   display: flex;
   flex-direction: column;
@@ -12,11 +16,21 @@ tr {
   width: 964px;
   height: 69px;
 }
+
 th {
   width: 200px;
   height: 40px;
   padding: 15px;
 
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+span img {
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 thead {
@@ -39,6 +53,13 @@ tbody {
   align-items: center;
 
   width: 964px;
+}
+
+tbody th {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 tbody tr {

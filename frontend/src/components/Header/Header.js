@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
+
   return (
     <header>
       <img className="logo-header" src={logo} alt="logo" />
@@ -14,12 +15,12 @@ export default function Header() {
         <span className="span-container-logo">
           <img
             className="profile"
-           onClick={()=>{
-            const dialog = document.querySelector(".dialog-usuario")
-            dialog.showModal()
-           }}
+            onClick={() => {
+              const dialog = document.querySelector(".dialog-usuario");
+              dialog.showModal();
+            }}
             src={profile}
-            alt=""
+            alt="avatar profile"
           />
         </span>
         <h1>{localStorage.getItem("nome")}</h1>

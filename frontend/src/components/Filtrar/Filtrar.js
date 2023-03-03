@@ -10,11 +10,14 @@ export default function Filtrar() {
     filtrar: false,
     categorias: [],
   });
+  const [btnActive, setBtnActive] = useState(false);
+
   const { categorias } = state;
 
   useEffect(() => {
     loadCategories(state, setState);
   }, []);
+
   return (
     <>
       <span
@@ -28,8 +31,9 @@ export default function Filtrar() {
         }}
       >
         <img src={icone} alt="filtrar" />
-        filtrar
+        Filtrar
       </span>
+
       <section className="section-container-filtrar">
         {state.filtrar ? (
           <div className="container-filtrar">
@@ -37,12 +41,10 @@ export default function Filtrar() {
             <section>
               {categorias.map((categoria) => {
                 return (
-                  <span
-                    key={categoria.id}
-                    className="btn-selecionar-categorias "
-                  >
+                  <span key={categoria.id} className="btn-selecionar-categoria">
                     <input
                       name={`input ${categoria.descricao}`}
+                      key={categoria.id}
                       className="input-checkbox"
                       type={"checkbox"}
                       onClick={(event) => {
@@ -69,8 +71,8 @@ export default function Filtrar() {
               })}
             </section>
             <span>
-              <button>Limpar Filtros</button>
-              <button>Aplicar Filtros</button>
+              <button className="btn-filtros">Limpar Filtros</button>
+              <button className="btn-filtros">Aplicar Filtros</button>
             </span>
           </div>
         ) : (

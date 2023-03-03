@@ -19,9 +19,10 @@ dialog {
   background: #ffffff;
   overflow: none;
 }
+
 .container-dialog input,
 select {
-all:unset;
+  all: unset;
 
   width: 485px;
   height: 63px;
@@ -40,6 +41,8 @@ all:unset;
   height: 26px;
   top: 67px;
   right: 64px;
+
+  cursor: pointer;
 }
 
 form,
@@ -48,6 +51,7 @@ label {
   flex-direction: column;
   gap: 10px;
 }
+
 label {
   font-family: "Rubik";
   font-style: normal;
@@ -66,6 +70,8 @@ label {
   background: #b9b9b9;
   border-radius: 10px;
   color: white;
+
+  cursor: pointer;
 }
 
 .btn-confirmar {
@@ -75,6 +81,15 @@ label {
   left: 180px;
   top: 720px;
   background: #7978d9;
+  border: none;
   border-radius: 5px;
   color: white;
+
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 17px;
+
+  cursor: pointer;
 }
