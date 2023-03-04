@@ -2,8 +2,7 @@ import { useState } from "react";
 import close from "../../assets/close.png";
 import "./style.dialog.css";
 
-export default function DialogEditar() {
-  const [state, setState] = useState({});
+export default function DialogEditar({state,setState}) {
 
   return (
     <dialog className="dialog-usuario">

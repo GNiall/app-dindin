@@ -21,7 +21,7 @@ dialog {
 }
 .container-dialog input,
 select {
-all:unset;
+
 
   width: 485px;
   height: 63px;
@@ -57,6 +57,10 @@ label {
 
   color: #484848;
 }
+.container-botoes-entrada-saida{
+  display: flex;
+  gap:10px;
+}
 
 .btn-entrada,
 .btn-saida {
@@ -66,6 +70,12 @@ label {
   background: #b9b9b9;
   border-radius: 10px;
   color: white;
+}
+.saida{
+  background: #ff576b;
+}
+.entrada {
+  background: #3a9ff1;
 }
 
 .btn-confirmar {

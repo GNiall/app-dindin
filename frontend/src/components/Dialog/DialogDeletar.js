@@ -6,7 +6,7 @@ export default function Deletar() {
         <span>
           <button
             className="btn-deletar-Sim"
-            onClick={() => {
+            onClick={async () => {
               console.log("Sim");
             }}
           >

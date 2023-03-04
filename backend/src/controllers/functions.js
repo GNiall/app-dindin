@@ -1,8 +1,10 @@
 const pool = require("../service/instance");
 
 async function listarUsuarios(req, res) {
+  const { id } = req.usuario;
+
   try {
-    await pool.query(`SELECT * FROM usuarios;`);
+    await pool.query(`SELECT * FROM usuarios WHERE id = $1;`, [id]);
 
     return res.json({
       id: req.usuario.id,
@@ -25,18 +27,58 @@ async function listarCategorias(req, res) {
 }
 
 async function listarTransacoes(req, res) {
+  const { id } = req.usuario;
+
   try {
-    const { rows } = await pool.query(`SELECT * FROM transacoes;`);
+    const { rows } = await pool.query(
+      `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
+      c.descricao as categoria_nome, c.id 
+      FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE usuario_id = $1;`,
+      [id]
+    );
 
     const insertData = rows.map((data) => {
       return {
-        id: data.id,
+        id: data.transacao_id,
         tipo: data.tipo,
         descricao: data.descricao,
         valor: data.valor,
         data: data.data,
         categoria_id: data.categoria_id,
         usuario_id: req.usuario.id,
+        categoria_nome: data.categoria_nome,
+      };
+    });
+
+    return res.status(200).json(insertData);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+async function detalharTransacaoID(req, res) {
+  const { id } = req.params;
+
+  try {
+    const { rows, rowCount } = await pool.query(
+      `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
+      c.descricao as categoria_nome, c.id as id_categoria 
+      FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE t.id = $1;`,
+      [id]
+    );
+
+    if (rowCount === 0) {
+      return res.status(400).json({ mensagem: "Transação não encontrada." });
+    }
+    const insertData = rows.map((data) => {
+      return {
+        id: data.transacao_id,
+        tipo: data.tipo,
+        descricao: data.descricao,
+        valor: data.valor,
+        data: data.data,
+        categoria_id: data.categoria_id,
+        usuario_id: req.usuario.id,
+        categoria_nome: data.categoria_nome,
       };
     });
 
@@ -46,27 +88,9 @@ async function listarTransacoes(req, res) {
   }
 }
 
-async function detalharTransacaoID(req, res) {
-  const { id } = req.params;
-
-  try {
-    const { rows, rowCount } = await pool.query(
-      `SELECT * FROM transacoes WHERE id = $1`,
-      [id]
-    );
-
-    if (rowCount === 0) {
-      return res.status(400).json({ mensagem: "Transação não encontrada." });
-    }
-
-    return res.status(200).json(rows);
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
-}
-
 async function cadastrarTransacao(req, res) {
   const { descricao, valor, data, categoria_id, tipo } = req.body;
+  const { id } = req.usuario;
 
   try {
     if (!descricao || !valor || !data || !categoria_id || !tipo) {
@@ -85,8 +109,15 @@ async function cadastrarTransacao(req, res) {
       return res.status(400).json({ mensagem: "Informe um tipo válido!" });
     }
 
-    const params = [descricao, valor, data, categoria_id, req.usuario.id, tipo];
     const { rows } = await pool.query(
+      `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
+      c.descricao as categoria_nome, c.id 
+      FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE usuario_id = $1;`,
+      [id]
+    );
+
+    const params = [descricao, valor, data, categoria_id, req.usuario.id, tipo];
+    const { rows: insertData } = await pool.query(
       `INSERT INTO transacoes (
         descricao,
         valor,
@@ -98,7 +129,16 @@ async function cadastrarTransacao(req, res) {
       params
     );
 
-    return res.status(201).json(rows);
+    return res.status(201).json({
+      id: insertData[0].id,
+      tipo: insertData[0].tipo,
+      descricao: insertData[0].descricao,
+      valor: insertData[0].valor,
+      data: insertData[0].data,
+      usuario_id: insertData[0].usuario_id,
+      categoria_id: insertData[0].categoria_id,
+      categoria_nome: rows[0].categoria_nome,
+    });
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -122,13 +162,13 @@ async function atualizarTransacaoID(req, res) {
     }
 
     const { rowCount } = await pool.query(
-      `SELECT * FROM categorias WHERE categorias_id = $1`,
+      `SELECT * FROM transacoes WHERE categoria_id = $1`,
       [categoria_id]
     );
 
     if (rowCount === 0) {
       return res.status(400).json({
-        mensagem: "Informe um ID válido da Transação para atualização.",
+        mensagem: "Informe uma categoria válida da Transação para atualização.",
       });
     }
 
@@ -168,6 +208,7 @@ async function deletarTransacaoID(req, res) {
         mensagem: "Informe um ID existente para a exclusão da transação.",
       });
     }
+
     await pool.query("DELETE FROM transacoes WHERE id = $1", [id]);
 
     return res.status(200).json();
@@ -177,10 +218,12 @@ async function deletarTransacaoID(req, res) {
 }
 
 async function listarExtrato(req, res) {
+  const { id } = req.usuario;
+
   try {
     const { rowCount } = await pool.query(
-      `SELECT * FROM transacoes WHERE tipo = $1 or tipo = $2;`,
-      ["entrada", "saida"]
+      `SELECT * FROM transacoes WHERE tipo = $1 or tipo = $2 and usuario_id = $3;`,
+      ["entrada", "saida", id]
     );
 
     if (rowCount === 0) {
@@ -191,8 +234,8 @@ async function listarExtrato(req, res) {
     }
 
     const { rows: entrada } = await pool.query(
-      `SELECT * FROM transacoes WHERE tipo = $1`,
-      ["entrada"]
+      `SELECT * FROM transacoes WHERE tipo = $1 and usuario_id = $2`,
+      ["entrada", id]
     );
 
     const entryValue = entrada.map((value) => {
@@ -202,22 +245,21 @@ async function listarExtrato(req, res) {
     let entry = 0;
 
     for (const value of entryValue) {
-      entry = entry + parseInt(value);
+      entry += parseInt(value);
     }
 
     const { rows: saida } = await pool.query(
-      `SELECT * FROM transacoes WHERE tipo = $1`,
-      ["saida"]
+      `SELECT * FROM transacoes WHERE tipo = $1 and usuario_id = $2`,
+      ["saida", id]
     );
 
     const exitValue = saida.map((value) => {
       return value.valor;
     });
-
     let exit = 0;
 
     for (const value of exitValue) {
-      exit = exit + parseInt(value);
+      exit += parseInt(value);
     }
 
     return res.status(201).json({

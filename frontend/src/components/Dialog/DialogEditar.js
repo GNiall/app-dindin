@@ -23,10 +23,10 @@ const [state, setState] = useState({});
 
         <h1>Editar Registro </h1>
         <span className="container-btn-registros">
-          <button type="checkbox" className="btn-entrada">
+          <button type="checkbo" className="btn-entrada">
             Entrada
           </button>
-          <button type="checkbox" className="btn-saida">
+          <button type="checkbo" className="btn-saida">
             Saida
           </button>
         </span>

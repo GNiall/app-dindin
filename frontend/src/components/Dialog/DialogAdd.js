@@ -1,37 +1,32 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import close from "../../assets/close.png";
-import { createTransaction, loadCategories } from "../../functions/requisicoes";
+import {
+  createTransaction,
+  loadCategories,
+  loadTransactions,
+} from "../../functions/requisicoes";
 import "./style.dialog.css";
 
-export default function DialogAdd() {
+export default function DialogAdd({ state, setState }) {
   const ref = useRef("");
-  const btnEntradaRef = useRef("");
-  const btnSaidaRef = useRef("");
-  const [state, setState] = useState({
-    categorias: [{
-      id:1,
-      descricao:"vendas"
-    }],
-   
-      descricao: "",
-      valor: "",
-      data: "",
-      categoria_id: "",
-      usuario_id: "",
-      tipo: "saida",
-    
-  });
-  const { descricao, valor, data, categoria_id, usuario_id, tipo } = state
+
+  const { descricao, valor, dataTransacao } = state;
   useEffect(() => {
     createTransaction(state, setState);
     loadCategories(state, setState);
-  },[]);
+  }, []);
   return (
     <dialog className="dialog-add" ref={ref}>
       <div className="container-dialog">
         <img
           className="img-close"
           onClick={() => {
+            setState({
+              ...state,
+              tipo: "saida",
+              entradaSelecinada: false,
+              saidaSelecionada: true,
+            });
             ref.current.close();
           }}
           src={close}
@@ -39,35 +34,66 @@ export default function DialogAdd() {
         />
 
         <h1>Adicionar Registro </h1>
-        <span className="container-btn-registros">
-          <button ref={btnEntradaRef} onChange={(event)=>{
-            if(state.tipo === "saida"){
-btnEntradaRef.current.style.background = "#3a9ff1"
-            }else{
-              btnEntradaRef.current.style.background = "#484848"
-            }
-          }} type="button" className="btn-entrada">
-            Entrada
-          </button>
-          <button ref={btnSaidaRef} onChange={(event)=>{
-            if(state.tipo === "saida"){
-btnSaidaRef.current.style.background = "#ff576b"
- 
 
-            }else{
-              btnSaidaRef.current.style.background = "#484848"
-            }
-          }} type="button" className="btn-saida">
-            Saida
-          </button>
-        </span>
         <form
           onSubmit={async (event) => {
             event.preventDefault();
-            if (!valor || !data || !categoria_id || !usuario_id || !tipo)
-              return;
+            document.querySelectorAll("option").forEach((element) => {
+              if (element.selected && element.id > 0) {
+                createTransaction(state, setState, element.id);
+              } else {
+                return;
+              }
+            });
+
+            setState({
+              ...state,
+              descricao: "",
+              valor: "",
+              dataTransacao: "",
+              categoriaId: "",
+              tipo: "saida",
+            });
+            loadTransactions();
+            ref.current.close();
           }}
         >
+          <div className="container-botoes-entrada-saida">
+            <button
+              type="button"
+              className={
+                state.entradaSelecinada ? "btn-entrada entrada " : "btn-entrada"
+              }
+              name="Entrada"
+              onClick={() => {
+                setState({
+                  ...state,
+                  tipo: "entrada",
+                  entradaSelecinada: true,
+                  saidaSelecionada: false,
+                });
+              }}
+            >
+              Entrada
+            </button>
+
+            <button
+              onClick={() => {
+                setState({
+                  ...state,
+                  tipo: "saida",
+                  entradaSelecinada: false,
+                  saidaSelecionada: true,
+                });
+              }}
+              type="button"
+              className={
+                state.saidaSelecionada ? "btn-saida saida " : "btn-saida"
+              }
+            >
+              Saida
+            </button>
+          </div>
           <label>
             valor
             <input
@@ -85,8 +111,12 @@ btnSaidaRef.current.style.background = "#ff576b"
               <option value="empty"></option>
               {state.categorias.map((categoria) => {
                 return (
-                  <option key={categoria.id} value={categoria.nome}>
-                    {categoria.nome}
+                  <option
+                    key={categoria.id}
+                    id={categoria.id}
+                    value={categoria.descricao}
+                  >
+                    {categoria.descricao}
                   </option>
                 );
               })}
@@ -95,12 +125,12 @@ btnSaidaRef.current.style.background = "#ff576b"
           <label>
             data
             <input
-              name="data"
-              type="text"
-              value={data}
-              onChange={(event) =>
-                setState({ ...state, [event.target.name]: event.target.value })
-              }
+              name="dataTransacao"
+              type="date"
+              value={dataTransacao}
+              onChange={(event) => {
+                setState({ ...state, [event.target.name]: event.target.value });
+              }}
             />
           </label>
           <label>
