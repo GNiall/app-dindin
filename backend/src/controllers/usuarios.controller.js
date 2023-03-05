@@ -17,6 +17,15 @@ async function cadastrarUsuario(req, res) {
       .json({ mensagem: "Informe um email no formato valido" });
 
   try {
+    const { rowCount } = await pool.query(
+      `SELECT * FROM usuarios WHERE email = $1;`,
+      [email]
+    );
+
+    if (rowCount > 0) {
+      return res.status(400).json({ mensagem: "E-mail já cadastrado!" });
+    }
+
     const senhaCryptografada = await bcrypt.hash(senha, 10);
     const params = [nome, email, senhaCryptografada];
 
@@ -84,7 +93,7 @@ async function realizarLogin(req, res) {
 }
 
 async function alterarCadastro(req, res) {
-  const { id } = req.params;
+  const { id } = req.usuario;
   const { nome, email, senha } = req.body;
 
   const senhaCryptografada = await bcrypt.hash(senha, 10);

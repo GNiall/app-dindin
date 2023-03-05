@@ -23,7 +23,7 @@ router.post("/login", realizarLogin);
 router.use(validarToken);
 
 router.get("/usuario", listarUsuarios);
-router.put("/usuario/:id/editar", alterarCadastro);
+router.put("/usuario/", alterarCadastro);
 router.get("/categoria", listarCategorias);
 router.get("/transacoes", listarTransacoes);
 router.get("/transacao/extrato", listarExtrato);
