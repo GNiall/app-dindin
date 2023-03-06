@@ -99,6 +99,14 @@ export default function Filtrar({
               type="submit"
                 onClick={(event) => {
                   loadTransactions(state, setState, arrayTransacaoFiltrado);
+                  const spans = document.querySelectorAll(
+                    ".btn-filtrar-categoria"
+                  );
+                  spans.forEach((span) => {
+                    span.style.background = "none";
+                    span.style.color = "black";
+                    span.style.background = "";
+                  });
                 }}
                 className="btn-aplicar-filtros"
               >

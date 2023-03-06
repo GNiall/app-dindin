@@ -32,13 +32,16 @@ function Table({
     loadTransactions(stateTransacoes, setStateTransacoes);
   }, []);
 
- 
-
   const handleArrowClick = () => {
     const newImage = stateTransacoes.imagem.includes("/EAAAAAElFTkSuQmCC")
       ? setaBaixo
       : setaCima;
 
+    if (newImage.includes("/EAAAAAElFTkSuQmCC")) {
+      localStorage.setItem("oremTabela", true);
+    } else {
+      localStorage.setItem("oremTabela", false);
+    }
     setStateTransacoes({ ...stateTransacoes, imagem: newImage });
   };
 
@@ -70,7 +73,6 @@ function Table({
                 }}
                 onClick={() => {
                   handleArrowClick();
-                  stateTransacoes.sort((a, b) => b - a);
                 }}
               >
                 Data

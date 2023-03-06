@@ -87,6 +87,7 @@ async function alterarCadastro(req, res) {
   const { id } = req.params;
   const { nome, email, senha } = req.body;
   try {
+    if([nome, email, senha].includes("undefined" )) return res.json("Preencha todos os campos")
     const senhaCryptografada = await bcrypt.hash(senha, 10);
     const params = [nome, email, senhaCryptografada, id];
     const data = await pool.query(

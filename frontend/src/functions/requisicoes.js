@@ -19,41 +19,32 @@ const loadCategories = async (state, setState) => {
 
 const loadTransactions = async (state, setState, filtro) => {
   try {
-     if (!filtro) {
-       console.log(filtro)
-       const { data } = await instanceAxios.get("/transacoes", {
-         headers: {
-           Authorization: `Bearer ${localStorage.getItem("token")}`,
-         },
-       });
-
-       setState((prevState) => ({
-         ...prevState,
-         transacoes: data,
-       }));
-     }
-
-    if (filtro) {
-
-      const categorias = filtro
-        .map((categoria) => categoria)
-        .join("&");
-        const { data } = await instanceAxios.get(`/transacoes?${categorias}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        
-        setState((prevState) => ({
-          ...prevState,
-          transacoes: data,
-        }));
-        console.log(data)
+    let response;
+    if (!filtro) {
+      response = await instanceAxios.get("/transacoes", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } else {
+      const categorias = filtro.join(",");
+      response = await instanceAxios.get(`/transacoes?filtro=${categorias}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(categorias)
     }
+    setState((prevState) => ({
+      ...prevState,
+      transacoes: response.data,
+    }));
+    console.log(response.data)
   } catch (error) {
     console.error(error);
   }
 };
+
 
 const createTransaction = async (state, setState, categoriaId) => {
   try {
@@ -114,7 +105,12 @@ const loadResume = async (state, setState) => {
 
 const editUser = async (state) => {
   try {
-    if(!state.senha || !state.confirmarSenha || state.senha !== state.confirmarSenha) return
+    if (
+      !state.senha ||
+      !state.confirmarSenha ||
+      state.senha !== state.confirmarSenha
+    )
+      return;
     await instanceAxios.put(
       `/usuario/${localStorage.getItem("id")}/editar`,
       {
@@ -128,6 +124,7 @@ const editUser = async (state) => {
         },
       }
     );
+    console.log("editou");
     localStorage.setItem("nome", state.nome);
     localStorage.setItem("email", state.email);
   } catch (error) {
