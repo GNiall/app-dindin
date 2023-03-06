@@ -40,7 +40,6 @@ async function listarTransacoes(req, res) {
     const placeholders = categories.map((_, i) => {
       return `$${i + 2}`;
     });
-    console.log(placeholders);
 
     const query = `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
   c.descricao as categoria_nome, c.id 
