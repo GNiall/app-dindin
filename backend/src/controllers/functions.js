@@ -29,15 +29,15 @@ async function listarTransacoes(req, res) {
   const { filtro } = req.query;
 
   try {
-    const categorias = [];
+    const categories = [];
 
     filtro.forEach((categoria) => {
-      categorias.push(categoria);
+      categories.push(categoria);
     });
 
-    const params = [id, ...categorias];
+    const params = [id, ...categories];
 
-    const placeholders = categorias.map((_, i) => {
+    const placeholders = categories.map((_, i) => {
       return `$${i + 2}`;
     });
     console.log(placeholders);
@@ -50,12 +50,12 @@ async function listarTransacoes(req, res) {
 
     const { rows } = await pool.query(query, params);
 
-    const arrayTeste = [];
+    const dataUser = [];
 
     const insertData = rows.filter((data) => {
       filtro.forEach((categoria) => {
         if (data.categoria_nome === categoria) {
-          arrayTeste.push({
+          dataUser.push({
             id: data.transacao_id,
             tipo: data.tipo,
             descricao: data.descricao,
@@ -69,7 +69,7 @@ async function listarTransacoes(req, res) {
       });
     });
 
-    return res.status(200).json(arrayTeste);
+    return res.status(200).json(dataUser);
   } catch (error) {
     return res.status(500).json(error.message);
   }
