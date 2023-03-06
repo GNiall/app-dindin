@@ -1,9 +1,14 @@
-import { useState } from "react";
-import close from "../../assets/close.png";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import closeIcon from "../../assets/close.png";
+import { editUser } from "../../functions/requisicoes";
 import "./style.dialog.css";
 
-export default function DialogEditar({state,setState}) {
-
+export default function UserDialog({ state, setState }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    editUser(state, setState);
+  }, []);
   return (
     <dialog className="dialog-usuario">
       <div className="container-dialog">
@@ -12,15 +17,27 @@ export default function DialogEditar({state,setState}) {
           onClick={() => {
             document.querySelector(".dialog-usuario").close();
           }}
-          src={close}
+          src={closeIcon}
           alt="close"
         />
 
-        <h1>Editar Perfil </h1>
+        <h1>Edit Profile</h1>
 
         <form
           onSubmit={(event) => {
             event.preventDefault();
+            if (
+              state.nome === "" ||
+              state.email === "" ||
+              state.senha === "" ||
+              state.confirmarSenha === ""
+            ) {
+              return;
+            }
+            localStorage.setItem("nome", state.nome);
+            editUser(state, setState);
+            document.querySelector(".dialog-usuario").close();
+            navigate("/");
           }}
         >
           <label>
@@ -28,7 +45,7 @@ export default function DialogEditar({state,setState}) {
             <input
               name="nome"
               type="text"
-              value={state.nome && ""}
+              value={state.nome}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
@@ -40,7 +57,7 @@ export default function DialogEditar({state,setState}) {
             <input
               name="email"
               type="text"
-              value={state.email && ""}
+              value={state.email}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
@@ -50,25 +67,27 @@ export default function DialogEditar({state,setState}) {
             Senha
             <input
               name="senha"
-              type="text"
-              value={state.senha && ""}
+              type="password"
+              value={state.senha}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
             />
           </label>
           <label>
-            Confirmação Senha
+            Confirmar Senha
             <input
-              name="confirmacaosenha"
-              type="text"
-              value={state.confirmacaosenha && ""}
+              name="confirmarSenha"
+              type="password"
+              value={state.confirmarSenha}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
             />
           </label>
-          <button className="btn-confirmar">Confirmar</button>
+          <button type="submit" className="btn-confirmar">
+            confirmar
+          </button>
         </form>
       </div>
     </dialog>

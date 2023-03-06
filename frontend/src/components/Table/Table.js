@@ -1,10 +1,6 @@
-import { useEffect } from "react";
-import setaCima from "../../assets/setaCima.png";
-import setaBaixo from "../../assets/setaBaixo.png";
-import lapisImagem from "../../assets/lapisImagem.png";
-import lixeiraImagem from "../../assets/lixeiraImagem.png";
-import "./style.table.css";
-import Deletar from "../Dialog/DialogDeletar";
+import { useEffect, memo } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   deleteTransaction,
   loadTransactions,
@@ -15,37 +11,52 @@ import {
   formatToWeekDay,
 } from "../../functions/templates";
 
+import setaCima from "../../assets/setaCima.png";
+import setaBaixo from "../../assets/setaBaixo.png";
+import lapisImagem from "../../assets/lapisImagem.png";
+import lixeiraImagem from "../../assets/lixeiraImagem.png";
+
+import popup from "../../assets/popup.png";
+import "./style.popup.css";
+import "./style.table.css";
+
 function Table({
   stateTransacoes,
   setStateTransacoes,
   stateDialogEditar,
   setStateDialogEditar,
 }) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     loadTransactions(stateTransacoes, setStateTransacoes);
-  }, [stateTransacoes.transacoes, setStateTransacoes]);
+  }, []);
+
+ 
 
   const handleArrowClick = () => {
     const newImage = stateTransacoes.imagem.includes("/EAAAAAElFTkSuQmCC")
       ? setaBaixo
       : setaCima;
+
     setStateTransacoes({ ...stateTransacoes, imagem: newImage });
   };
 
   const handleEditClick = (transacao) => {
-    setStateDialogEditar({ ...stateDialogEditar, transacao });
     const dialog = document.querySelector(".dialog-editar");
-    loadTransactions(stateTransacoes, setStateTransacoes);
     dialog.showModal();
-  };
+    setStateDialogEditar({
+      ...stateDialogEditar,
+      transacaoSelecionada: transacao,
+    });
+    loadTransactions(stateTransacoes, setStateTransacoes);
 
-  const handleDeleteClick = async (id) => {
-    await deleteTransaction(stateTransacoes, setStateTransacoes, id);
+    const popupBox = document.querySelector(`.popup-box${transacao.id}`);
+    popupBox.classList.add("hidden");
   };
 
   return (
     <>
-      <Deletar />
       <table>
         <thead>
           <tr>
@@ -57,7 +68,10 @@ function Table({
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                onClick={handleArrowClick}
+                onClick={() => {
+                  handleArrowClick();
+                  stateTransacoes.sort((a, b) => b - a);
+                }}
               >
                 Data
                 <img
@@ -75,33 +89,114 @@ function Table({
           </tr>
         </thead>
         <tbody>
-          {stateTransacoes.transacoes.map((transacao) => (
-            <tr key={transacao.id}>
-              <th>{formatToDate(transacao.data)}</th>
-              <th>{formatToWeekDay(transacao.data)}</th>
-              <th>{transacao.descricao}</th>
-              <th>{transacao.categoria_nome}</th>
-              <th>{formatToMoney(Number(transacao.valor) / 100)}</th>
-              <th>
-                <span>
-                  <img
-                    onClick={() => handleEditClick(transacao)}
-                    src={lapisImagem}
-                    alt=""
-                  />
-                  <img
-                    onClick={() => handleDeleteClick(transacao.id)}
-                    src={lixeiraImagem}
-                    alt=""
-                  />
-                </span>
-              </th>
-            </tr>
-          ))}
+          {stateTransacoes.transacoes.map((transacao) => {
+            return (
+              <tr key={transacao.id}>
+                <th>{formatToDate(transacao.data)}</th>
+                <th>{formatToWeekDay(transacao.data)}</th>
+                <th>{transacao.descricao}</th>
+                <th>{transacao.categoria_nome}</th>
+                <th
+                  className={
+                    transacao.tipo === "saida" ? "th-saida" : "th-entrada"
+                  }
+                >
+                  {formatToMoney(Number(transacao.valor) / 100)}
+                </th>
+                <th>
+                  <span>
+                    <img
+                      onClick={() => {
+                        setStateDialogEditar({
+                          ...stateDialogEditar,
+                          transacao,
+                        });
+                        handleEditClick(transacao);
+                      }}
+                      src={lapisImagem}
+                      alt=""
+                    />
+
+                    <img
+                      onClick={() => {
+                        localStorage.setItem("idTransacao", transacao.id);
+
+                        const popupContainer = document.querySelector(
+                          `.popup${transacao.id}`
+                        );
+                        popupContainer.classList.remove("hidden");
+                      }}
+                      src={lixeiraImagem}
+                      alt=""
+                    />
+                  </span>
+                  <div id={transacao.id} className={`popup-background hidden`}>
+                    <img src={popup} alt="popup" />
+                    <div className={`popup-box `}>
+                      <p>Apagar item ?</p>
+                      <div className="container-btn-sim-nao">
+                        <button
+                          className="btn-popup-sim"
+                          onClick={() => {
+                            deleteTransaction(transacao.id);
+                            navigate("/");
+                          }}
+                        >
+                          Sim
+                        </button>
+                        <button
+                          className="btn-popup-nao"
+                          onClick={() => {
+                            localStorage.setItem("idTransacao", transacao.id);
+                            document
+                              .querySelector(`.popup-${transacao.id}`)
+                              .classList.add("hidden");
+                          }}
+                        >
+                          Não
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    id={transacao.id}
+                    className={`popup-background popup${transacao.id} hidden`}
+                  >
+                    <img src={popup} alt="popup" />
+                    <div className={`popup-box `}>
+                      <p>Apagar item ?</p>
+                      <div className="container-btn-sim-nao">
+                        <button
+                          className="btn-popup-sim"
+                          onClick={() => {
+                            deleteTransaction(transacao.id);
+                            navigate("/");
+                          }}
+                        >
+                          Sim
+                        </button>
+                        <button
+                          className="btn-popup-nao"
+                          onClick={() => {
+                            localStorage.setItem("idTransacao", transacao.id);
+                            document
+                              .querySelector(`.popup${transacao.id}`)
+                              .classList.add("hidden");
+                          }}
+                        >
+                          Não
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>
   );
 }
 
-export default Table;
+export default memo(Table);

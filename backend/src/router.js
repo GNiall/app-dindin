@@ -24,7 +24,10 @@ router.use(validarToken);
 
 router.get("/usuario", listarUsuarios);
 router.put("/usuario/:id/editar", alterarCadastro);
+
 router.get("/categoria", listarCategorias);
+
+// router.get("/transacoes/categoria", listarTransacoesFiltradas);
 router.get("/transacoes", listarTransacoes);
 router.get("/transacao/extrato", listarExtrato);
 router.get("/transacao/:id", detalharTransacaoID);

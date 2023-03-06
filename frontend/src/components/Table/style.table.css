@@ -19,6 +19,13 @@ th {
 
 }
 
+.th-entrada {
+  color: #645ffb;
+}
+.th-saida {
+  color: #fa8c10;
+}
+
 thead {
   display: flex;
   justify-content: space-around;

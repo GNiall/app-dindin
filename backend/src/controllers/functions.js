@@ -25,36 +25,88 @@ async function listarCategorias(req, res) {
     return res.status(500).json(error.message);
   }
 }
-
 async function listarTransacoes(req, res) {
   const { id } = req.usuario;
+  const { filtro } = req.query;
 
   try {
-    const { rows } = await pool.query(
-      `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
-      c.descricao as categoria_nome, c.id 
-      FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE usuario_id = $1;`,
-      [id]
-    );
+    if (filtro) {
+      const categorias = [];
 
-    const insertData = rows.map((data) => {
-      return {
-        id: data.transacao_id,
-        tipo: data.tipo,
-        descricao: data.descricao,
-        valor: data.valor,
-        data: data.data,
-        categoria_id: data.categoria_id,
-        usuario_id: req.usuario.id,
-        categoria_nome: data.categoria_nome,
-      };
-    });
+      filtro.forEach((categoria) => {
+        categorias.push(categoria);
+      });
 
-    return res.status(200).json(insertData);
+      const params = [id, ...categorias];
+
+      const placeholders = categorias.map((_, i) => {
+        return `$${i + 2}`;
+      });
+
+      const query = `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
+  c.descricao as categoria_nome, c.id 
+  FROM transacoes t 
+  JOIN categorias c ON t.categoria_id = c.id 
+  WHERE t.usuario_id = $1 AND c.descricao IN (${placeholders})`;
+
+      const { rows } = await pool.query(query, params);
+
+      const arrayTeste = [];
+
+      rows.filter((data) => {
+        filtro.forEach((categoria) => {
+          if (data.categoria_nome === categoria) {
+            arrayTeste.push({
+              id: data.transacao_id,
+              tipo: data.tipo,
+              descricao: data.descricao,
+              valor: data.valor,
+              data: data.data,
+              categoria_id: data.categoria_id,
+              usuario_id: req.usuario.id,
+              categoria_nome: data.categoria_nome,
+            });
+          }
+        });
+      });
+
+      return res.status(200).json(arrayTeste);
+    } else {
+      const { rows } = await pool.query(
+        `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
+       c.descricao as categoria_nome, c.id 
+       FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE usuario_id = $1;`,
+        [id]
+      );
+
+      const insertData = rows.map((data) => {
+        return {
+          id: data.transacao_id,
+          tipo: data.tipo,
+          descricao: data.descricao,
+          valor: data.valor,
+          data: data.data,
+          categoria_id: data.categoria_id,
+          usuario_id: req.usuario.id,
+          categoria_nome: data.categoria_nome,
+        };
+      });
+
+      return res.status(200).json(insertData);
+    }
   } catch (error) {
     return res.status(500).json(error.message);
   }
 }
+// async function listarTransacoes(req, res) {
+//   const { id } = req.usuario;
+
+//   try {
+//
+//   } catch (error) {
+//     return res.status(500).json(error.message);
+//   }
+// }
 async function detalharTransacaoID(req, res) {
   const { id } = req.params;
 

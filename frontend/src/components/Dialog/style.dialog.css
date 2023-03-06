@@ -1,6 +1,6 @@
 dialog {
   min-width: 1440px;
-  min-height: 1024px;
+  min-height: 1608px;
   border-radius: 8px;
   background-color: #0000005f;
   padding: 89px 0 69px 415px;
@@ -11,13 +11,14 @@ dialog {
   flex-direction: column;
   align-items: center;
   width: 611px;
-  height: 799px;
+  height: 769px;
   padding: 61px 0 64px 0;
   gap: 50px;
   position: fixed;
   top: 79px;
   background: #ffffff;
   overflow: none;
+  
 }
 .container-dialog input,
 select {
@@ -81,10 +82,8 @@ label {
 .btn-confirmar {
   width: 236px;
   height: 46px;
-  position: absolute;
-  left: 180px;
-  top: 720px;
+margin: 20px 0 0 130px;
   background: #7978d9;
   border-radius: 5px;
   color: white;
-}
+} 

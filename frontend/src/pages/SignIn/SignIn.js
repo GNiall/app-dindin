@@ -8,7 +8,7 @@ function SignIn() {
     email: "",
     password: "",
     showPassword: false,
-    mensagem:""
+    mensagem: "",
   });
   const { email, senha, showPassword, mensagem } = state;
   const navigate = useNavigate();
@@ -44,6 +44,7 @@ function SignIn() {
               });
               localStorage.setItem("token", data.token);
               localStorage.setItem("nome", data.usuarioLogado.nome);
+              localStorage.setItem("email", data.usuarioLogado.email);
               localStorage.setItem("id", data.usuarioLogado.id);
               setState({
                 ...state,

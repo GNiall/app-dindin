@@ -3,11 +3,18 @@ import icone from "../../assets/icons8-filtro-48 1.png";
 import "./style.css";
 import plus from "../../assets/plus.png";
 import { useEffect } from "react";
-import { loadCategories } from "../../functions/requisicoes";
+import { loadCategories, loadTransactions } from "../../functions/requisicoes";
 
-export default function Filtrar({ state,setState ,stateTransacoes, setStateTransacoes, stateDialogEditar, setStateDialogEditar }) {
+export default function Filtrar({
+  state,
+  setState,
+  stateTransacoes,
+  setStateTransacoes,
+  stateDialogEditar,
+  setStateDialogEditar,
+}) {
   const { categorias } = state;
-
+  let arrayTransacaoFiltrado = [];
   useEffect(() => {
     loadCategories(state, setState);
   }, []);
@@ -50,10 +57,15 @@ export default function Filtrar({ state,setState ,stateTransacoes, setStateTrans
                         span.style.boxShadow =
                           "0px 2px 11px rgba(0, 0, 0, 0.1)";
                         span.style.borderRadius = "10px";
+                        arrayTransacaoFiltrado.push(categoria.descricao);
                       } else if (
                         event.type === "click" &&
                         span.style.background === "rgb(121, 120, 217)"
                       ) {
+                        const novoArray = arrayTransacaoFiltrado.filter(
+                          (item) => item !== categoria.descricao
+                        );
+                        arrayTransacaoFiltrado = novoArray;
                         span.style.background = "none";
                         span.style.color = "black";
                         span.style.background = "";
@@ -67,8 +79,31 @@ export default function Filtrar({ state,setState ,stateTransacoes, setStateTrans
               })}
             </section>
             <span>
-              <button className="btn-limpar-filtros">Limpar Filtros</button>
-              <button className="btn-aplicar-filtros">Aplicar Filtros</button>
+              <button
+                onClick={() => {
+                  const spans = document.querySelectorAll(
+                    ".btn-filtrar-categoria"
+                  );
+                  spans.forEach((span) => {
+                    span.style.background = "none";
+                    span.style.color = "black";
+                    span.style.background = "";
+                  });
+                  arrayTransacaoFiltrado = [];
+                }}
+                className="btn-limpar-filtros"
+              >
+                Limpar Filtros
+              </button>
+              <button
+              type="submit"
+                onClick={(event) => {
+                  loadTransactions(state, setState, arrayTransacaoFiltrado);
+                }}
+                className="btn-aplicar-filtros"
+              >
+                Aplicar Filtros
+              </button>
             </span>
           </div>
         ) : (
@@ -78,8 +113,8 @@ export default function Filtrar({ state,setState ,stateTransacoes, setStateTrans
           ></div>
         )}
         <Table
-          state={stateDialogEditar}
-          setState={setStateDialogEditar}
+          stateDialogEditar={stateDialogEditar}
+          setStateDialogEditar={setStateDialogEditar}
           stateTransacoes={stateTransacoes}
           setStateTransacoes={setStateTransacoes}
         />

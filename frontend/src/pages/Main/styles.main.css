@@ -1,8 +1,8 @@
 .container-main {
   display: flex;
   flex-direction: column;
-  width: 1440px;
-  height: 1024px;
+ max-width: 1440px;
+ max-height: 1024px;
   margin-top: -70px;
   background: #ffffff;
   border-radius: 60px 60px 0px 0px;
@@ -108,6 +108,4 @@
 }
 .span-total b {
   color: #3a9ff1;
-}
-
-
+} 

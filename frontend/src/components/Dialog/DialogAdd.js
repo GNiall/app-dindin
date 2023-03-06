@@ -1,15 +1,12 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import close from "../../assets/close.png";
-import {
-  createTransaction,
-  loadCategories,
-  loadTransactions,
-} from "../../functions/requisicoes";
+import { createTransaction, loadCategories } from "../../functions/requisicoes";
 import "./style.dialog.css";
 
 export default function DialogAdd({ state, setState }) {
   const ref = useRef("");
-
+  const navigate = useNavigate();
   const { descricao, valor, dataTransacao } = state;
   useEffect(() => {
     createTransaction(state, setState);
@@ -41,9 +38,8 @@ export default function DialogAdd({ state, setState }) {
             document.querySelectorAll("option").forEach((element) => {
               if (element.selected && element.id > 0) {
                 createTransaction(state, setState, element.id);
-              } else {
-                return;
               }
+              return;
             });
 
             setState({
@@ -53,8 +49,10 @@ export default function DialogAdd({ state, setState }) {
               dataTransacao: "",
               categoriaId: "",
               tipo: "saida",
+              saidaSelecionada: true,
+              entradaSelecinada: false,
             });
-            loadTransactions();
+            navigate("/");
             ref.current.close();
           }}
         >

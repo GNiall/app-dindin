@@ -1,46 +1,102 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import close from "../../assets/close.png";
+import { createTransaction, loadCategories } from "../../functions/requisicoes";
 import "./style.dialog.css";
 
-
-
-export default function DialogEditar() {
+export default function DialogAdd({ state, setState }) {
   const ref = useRef("");
-const [state, setState] = useState({});
 
-
+  const { descricao, valor, dataTransacao } = state;
+  useEffect(() => {
+    createTransaction(state, setState);
+    loadCategories(state, setState);
+  }, []);
   return (
-    <dialog className="dialog-editar" ref={ref}>
+    <dialog className="dialog-add" ref={ref}>
       <div className="container-dialog">
         <img
           className="img-close"
           onClick={() => {
+            setState({
+              ...state,
+              tipo: "saida",
+              entradaSelecinada: false,
+              saidaSelecionada: true,
+            });
             ref.current.close();
           }}
           src={close}
           alt="close"
         />
 
-        <h1>Editar Registro </h1>
-        <span className="container-btn-registros">
-          <button type="checkbo" className="btn-entrada">
-            Entrada
-          </button>
-          <button type="checkbo" className="btn-saida">
-            Saida
-          </button>
-        </span>
+        <h1>Adicionar Registro </h1>
+
         <form
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
+            document.querySelectorAll("option").forEach((element) => {
+              if (element.selected && element.id > 0) {
+                createTransaction(state, setState, element.id);
+              }
+              return;
+            });
+
+            setState({
+              ...state,
+              descricao: "",
+              valor: "",
+              dataTransacao: "",
+              categoriaId: "",
+              tipo: "saida",
+              saidaSelecionada: true,
+              entradaSelecinada: false,
+            });
+
+            ref.current.close();
           }}
         >
+          <div className="container-botoes-entrada-saida">
+            <button
+              type="button"
+              className={
+                state.entradaSelecinada ? "btn-entrada entrada " : "btn-entrada"
+              }
+              name="Entrada"
+              onClick={() => {
+                setState({
+                  ...state,
+                  tipo: "entrada",
+                  entradaSelecinada: true,
+                  saidaSelecionada: false,
+                });
+              }}
+            >
+              Entrada
+            </button>
+
+            <button
+              onClick={() => {
+                setState({
+                  ...state,
+                  tipo: "saida",
+                  entradaSelecinada: false,
+                  saidaSelecionada: true,
+                });
+              }}
+              type="button"
+              className={
+                state.saidaSelecionada ? "btn-saida saida " : "btn-saida"
+              }
+            >
+              Saida
+            </button>
+          </div>
           <label>
             valor
             <input
               name="valor"
-              type="text"
-              value={state.valor}
+              type="number"
+              value={valor}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
@@ -50,28 +106,28 @@ const [state, setState] = useState({});
             categoria
             <select>
               <option value="empty"></option>
-              {state.categorias ? (
-                state.categorias.map((categoria) => {
-                  return (
-                    <option key={categoria.id} value={categoria.nome}>
-                      {categoria.nome}
-                    </option>
-                  );
-                })
-              ) : (
-                <></>
-              )}
+              {state.categorias.map((categoria) => {
+                return (
+                  <option
+                    key={categoria.id}
+                    id={categoria.id}
+                    value={categoria.descricao}
+                  >
+                    {categoria.descricao}
+                  </option>
+                );
+              })}
             </select>
           </label>
           <label>
             data
             <input
-              name="data"
-              type="text"
-              value={state.data && ""}
-              onChange={(event) =>
-                setState({ ...state, [event.target.name]: event.target.value })
-              }
+              name="dataTransacao"
+              type="date"
+              value={dataTransacao}
+              onChange={(event) => {
+                setState({ ...state, [event.target.name]: event.target.value });
+              }}
             />
           </label>
           <label>
@@ -79,13 +135,15 @@ const [state, setState] = useState({});
             <input
               name="descricao"
               type="text"
-              value={state.descricao && ""}
+              value={descricao}
               onChange={(event) =>
                 setState({ ...state, [event.target.name]: event.target.value })
               }
             />
           </label>
-          <button className="btn-confirmar">Confirmar</button>
+          <button className="btn-confirmar" type="submit">
+            Confirmar
+          </button>
         </form>
       </div>
     </dialog>

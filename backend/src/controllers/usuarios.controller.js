@@ -86,15 +86,20 @@ async function realizarLogin(req, res) {
 async function alterarCadastro(req, res) {
   const { id } = req.params;
   const { nome, email, senha } = req.body;
+  try {
+    const senhaCryptografada = await bcrypt.hash(senha, 10);
+    const params = [nome, email, senhaCryptografada, id];
+    const data = await pool.query(
+      `UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *;`,
+      params
+    );
 
-  const senhaCryptografada = await bcrypt.hash(senha, 10);
-  const params = [nome, email, senhaCryptografada, id];
-  await pool.query(
-    `UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4;`,
-    params
-  );
-
-  res.status(200).json();
+    res
+      .status(200)
+      .json(data.rows[0]);
+  } catch (error) {
+    res.json(error.message);
+  }
 }
 
 module.exports = {
