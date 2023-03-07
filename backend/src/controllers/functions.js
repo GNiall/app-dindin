@@ -51,7 +51,7 @@ async function listarTransacoes(req, res) {
 
     const dataUser = [];
 
-    const insertData = rows.filter((data) => {
+    rows.filter((data) => {
       filtro.forEach((categoria) => {
         if (data.categoria_nome === categoria) {
           dataUser.push({
@@ -75,7 +75,6 @@ async function listarTransacoes(req, res) {
 }
 
 async function detalharTransacaoID(req, res) {
-  const { id } = req.usuario;
   const { id: usuario_id } = req.params;
 
   try {
@@ -130,13 +129,6 @@ async function cadastrarTransacao(req, res) {
       return res.status(400).json({ mensagem: "Informe um tipo válido!" });
     }
 
-    const { rows } = await pool.query(
-      `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
-      c.descricao as categoria_nome, c.id 
-      FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE usuario_id = $1;`,
-      [id]
-    );
-
     const params = [descricao, valor, data, categoria_id, req.usuario.id, tipo];
     const { rows: insertData } = await pool.query(
       `INSERT INTO transacoes (
@@ -148,6 +140,13 @@ async function cadastrarTransacao(req, res) {
         tipo
         ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
       params
+    );
+
+    const { rows } = await pool.query(
+      `SELECT t.id as transacao_id, t.tipo, t.descricao, t.valor, t.data, t.categoria_id, t.usuario_id, 
+          c.descricao as categoria_nome, c.id 
+          FROM transacoes t join categorias c ON t.categoria_id = c.id WHERE usuario_id = $1;`,
+      [id]
     );
 
     return res.status(201).json({
